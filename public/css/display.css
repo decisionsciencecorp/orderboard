@@ -1,0 +1,243 @@
+/**
+ * Ghost Kitchen Order Board - Driver Display Styles
+ * 
+ * Full-screen, landscape, readable from 8-10 ft
+ * Dark background, light text, no scrolling
+ */
+
+:root {
+    --bg-dark: #0d0d0d;
+    --bg-card: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --status-preparing: #6c757d;
+    --status-ready: #28a745;
+    --accent-ready: #00ff88;
+    --border-color: #333333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+}
+
+/* Header */
+.display-header {
+    background-color: var(--bg-card);
+    padding: 1rem 2rem;
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.display-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.display-header .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.display-header .status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--status-ready);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Column Headers */
+.column-headers {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr 1fr;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+}
+
+/* Orders Container */
+.orders-container {
+    height: calc(100vh - 140px);
+    overflow: hidden;
+    padding: 0.5rem 2rem;
+}
+
+/* Order Row */
+.order-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.25rem 1rem;
+    margin-bottom: 0.5rem;
+    background-color: var(--bg-card);
+    border-radius: 8px;
+    border-left: 4px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.order-row.status-ready {
+    border-left-color: var(--accent-ready);
+    background-color: rgba(0, 255, 136, 0.05);
+}
+
+.order-row.status-preparing {
+    border-left-color: var(--status-preparing);
+}
+
+/* Customer Name */
+.order-name {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Platform Logo */
+.order-platform {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.order-platform img {
+    height: 48px;
+    width: auto;
+    max-width: 140px;
+    object-fit: contain;
+}
+
+/* Platform text fallback */
+.order-platform-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.order-platform-text.doordash {
+    color: #FF3008;
+}
+
+.order-platform-text.ubereats {
+    color: #06C167;
+}
+
+.order-platform-text.grubhub {
+    color: #F63440;
+}
+
+/* Status */
+.order-status {
+    font-size: 1.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.order-status.preparing {
+    color: var(--status-preparing);
+}
+
+.order-status.ready {
+    color: var(--accent-ready);
+    animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 5px var(--accent-ready); }
+    to { text-shadow: 0 0 20px var(--accent-ready), 0 0 30px var(--accent-ready); }
+}
+
+.order-status .arrow {
+    font-size: 2rem;
+}
+
+/* Shelf Location */
+.order-shelf {
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--accent-ready);
+}
+
+.order-shelf:empty::after {
+    content: '—';
+    color: var(--border-color);
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-secondary);
+    font-size: 2rem;
+}
+
+.empty-state .icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Responsive adjustments for larger displays */
+@media (min-width: 1920px) {
+    .order-name {
+        font-size: 3rem;
+    }
+    
+    .order-platform img {
+        height: 64px;
+    }
+    
+    .order-status {
+        font-size: 2rem;
+    }
+    
+    .order-shelf {
+        font-size: 3.5rem;
+    }
+    
+    .order-row {
+        padding: 1.5rem 1.5rem;
+    }
+}
+
+/* Clock */
+.display-clock {
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
