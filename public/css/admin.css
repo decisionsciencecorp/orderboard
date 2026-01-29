@@ -1,0 +1,224 @@
+/**
+ * Ghost Kitchen Order Board - Admin Panel Styles
+ */
+
+:root {
+    --bg-dark: #1a1a2e;
+    --bg-card: #16213e;
+    --bg-input: #0f3460;
+    --text-primary: #eee;
+    --text-secondary: #a0a0a0;
+    --accent-primary: #e94560;
+    --accent-success: #28a745;
+    --accent-warning: #ffc107;
+    --border-color: #0f3460;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--bg-card) !important;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+/* Cards */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.card-header {
+    background-color: var(--bg-input);
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+}
+
+/* Forms */
+.form-control, .form-select {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--bg-input);
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+    box-shadow: 0 0 0 0.25rem rgba(233, 69, 96, 0.25);
+}
+
+.form-control::placeholder {
+    color: var(--text-secondary);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+.btn-primary:hover {
+    background-color: #d63a52;
+    border-color: #d63a52;
+}
+
+.btn-success {
+    background-color: var(--accent-success);
+    border-color: var(--accent-success);
+}
+
+.btn-outline-secondary {
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+}
+
+/* Tables */
+.table {
+    color: var(--text-primary);
+}
+
+.table thead th {
+    background-color: var(--bg-input);
+    border-color: var(--border-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+}
+
+.table tbody td {
+    border-color: var(--border-color);
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(233, 69, 96, 0.1);
+}
+
+/* Status Badges */
+.badge-preparing {
+    background-color: var(--text-secondary);
+    color: #000;
+}
+
+.badge-ready {
+    background-color: var(--accent-success);
+    color: #fff;
+}
+
+/* Platform Badges */
+.badge-doordash {
+    background-color: #ff3008;
+    color: #fff;
+}
+
+.badge-ubereats {
+    background-color: #06c167;
+    color: #fff;
+}
+
+.badge-grubhub {
+    background-color: #f63440;
+    color: #fff;
+}
+
+/* Stats Cards */
+.stat-card {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+}
+
+/* Order Actions */
+.order-actions .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Shelf Location Display */
+.shelf-badge {
+    font-size: 1.5rem;
+    font-weight: 700;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background-color: var(--accent-success);
+    color: #fff;
+}
+
+/* Modal Adjustments */
+.modal-content {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+.modal-header {
+    border-bottom-color: var(--border-color);
+}
+
+.modal-footer {
+    border-top-color: var(--border-color);
+}
+
+.btn-close {
+    filter: invert(1);
+}
+
+/* Alerts */
+.alert {
+    border: none;
+}
+
+/* Login Page */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* API Key Display */
+.api-key-display {
+    font-family: 'Courier New', monospace;
+    background-color: var(--bg-input);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    word-break: break-all;
+}
