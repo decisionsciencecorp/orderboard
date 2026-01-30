@@ -266,6 +266,22 @@ This project uses dual licensing:
 - **Code**: GNU Affero General Public License v3.0 (AGPLv3)
 - **Documentation**: Creative Commons Attribution-ShareAlike 4.0 (CC-BY-SA 4.0)
 
+## Testing
+
+Full test suite (unit, integration, E2E):
+
+```bash
+composer install
+composer test                    # PHPUnit: unit + integration (53 tests; 10 HTTP tests skip if server down)
+composer test -- --testsuite Unit
+composer test -- --testsuite Integration
+
+npm install && npx playwright install
+npm run e2e                     # Playwright E2E (starts server automatically)
+```
+
+See [tests/README.md](tests/README.md) for details and coverage.
+
 ## Support
 
 For issues or questions:

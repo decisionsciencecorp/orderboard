@@ -1,0 +1,21 @@
+{
+    "name": "orderboard/ghost-kitchen-orderboard",
+    "description": "Ghost Kitchen Order Board - test and dev dependencies",
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    },
+    "config": {
+        "allow-plugins": {}
+    },
+    "autoload": {
+        "psr-4": {}
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OrderBoard\\Tests\\": "tests/php/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

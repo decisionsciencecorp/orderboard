@@ -358,12 +358,13 @@ function trackApiUsage(string $endpoint, bool $error = false): void {
     $db = getDB();
     
     $today = date('Y-m-d');
+    $errVal = $error ? 1 : 0;
     
     $db->exec("
         INSERT INTO stats_api_usage (endpoint, requests, errors, date)
-        VALUES ('$endpoint', 1, " . ($error ? 1 : 0) . ", '$today')
+        VALUES ('" . $db->escapeString($endpoint) . "', 1, $errVal, '" . $db->escapeString($today) . "')
         ON CONFLICT(endpoint, date) DO UPDATE SET
             requests = requests + 1,
-            errors = errors + " . ($error ? 1 : 0)
+            errors = errors + $errVal
     ");
 }
