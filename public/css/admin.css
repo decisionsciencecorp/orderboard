@@ -1,17 +1,19 @@
 /**
  * Ghost Kitchen Order Board - Admin Panel Styles
+ * Contrast tuned for WCAG AA (4.5:1 normal text, 3:1 large/UI).
  */
 
 :root {
     --bg-dark: #1a1a2e;
-    --bg-card: #16213e;
-    --bg-input: #0f3460;
-    --text-primary: #eee;
-    --text-secondary: #a0a0a0;
+    --bg-card: #1e2a4a;
+    --bg-input: #1c2d4a;
+    --text-primary: #f8f9fa;
+    --text-secondary: #b8c5d6;
+    --text-muted: #8fa3bf;
     --accent-primary: #e94560;
-    --accent-success: #28a745;
-    --accent-warning: #ffc107;
-    --border-color: #0f3460;
+    --accent-success: #2d9d4e;
+    --accent-warning: #e6a800;
+    --border-color: #2d4a6f;
 }
 
 body {
@@ -19,6 +21,21 @@ body {
     background-color: var(--bg-dark);
     color: var(--text-primary);
     min-height: 100vh;
+}
+
+/* Ensure labels and nav links meet contrast */
+.form-label {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.navbar .nav-link {
+    color: var(--text-primary) !important;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: #fff !important;
 }
 
 /* Navbar */
@@ -37,6 +54,7 @@ body {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .card-header {
@@ -52,6 +70,10 @@ body {
     color: var(--text-primary);
 }
 
+.form-control:hover, .form-select:hover {
+    border-color: var(--text-muted);
+}
+
 .form-control:focus, .form-select:focus {
     background-color: var(--bg-input);
     border-color: var(--accent-primary);
@@ -60,6 +82,10 @@ body {
 }
 
 .form-control::placeholder {
+    color: var(--text-muted);
+}
+
+.form-text {
     color: var(--text-secondary);
 }
 
@@ -87,6 +113,26 @@ body {
 .btn-outline-secondary:hover {
     background-color: var(--bg-input);
     color: var(--text-primary);
+    border-color: var(--text-secondary);
+}
+
+/* Alerts: ensure text is readable on Bootstrap alert backgrounds */
+.alert-danger {
+    color: #1a0a0c;
+    background-color: #f8d7da;
+    border: 1px solid #f1aeb5;
+}
+
+.alert-success {
+    color: #0a1f0f;
+    background-color: #d1e7dd;
+    border: 1px solid #a3cfbb;
+}
+
+.alert-warning {
+    color: #1f1a0a;
+    background-color: #fff3cd;
+    border: 1px solid #ffecb5;
 }
 
 /* Tables */
@@ -114,8 +160,9 @@ body {
 
 /* Status Badges */
 .badge-preparing {
-    background-color: var(--text-secondary);
-    color: #000;
+    background-color: var(--text-muted);
+    color: #1a1a2e;
+    font-weight: 600;
 }
 
 .badge-ready {
@@ -156,6 +203,7 @@ body {
     text-transform: uppercase;
     font-size: 0.85rem;
     letter-spacing: 0.05em;
+    font-weight: 500;
 }
 
 /* Order Actions */
@@ -212,6 +260,20 @@ body {
 .login-card {
     width: 100%;
     max-width: 400px;
+}
+
+.login-card .card-header {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+}
+
+/* Secondary links (e.g. View Display Board) */
+a.text-secondary {
+    color: var(--text-secondary) !important;
+}
+
+a.text-secondary:hover {
+    color: var(--text-primary) !important;
 }
 
 /* API Key Display */

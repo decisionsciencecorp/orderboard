@@ -76,6 +76,8 @@ class AuthTest extends TestCase
         $this->assertArrayHasKey('admin_id', $_SESSION);
         $this->assertArrayHasKey('admin_username', $_SESSION);
         $this->assertSame('admin', $_SESSION['admin_username']);
+        $this->assertIsInt($_SESSION['admin_id']);
+        $this->assertArrayHasKey('login_time', $_SESSION);
     }
 
     public function testAttemptLoginFailsWithWrongPassword(): void

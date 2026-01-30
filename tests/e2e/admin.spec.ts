@@ -7,6 +7,12 @@ test.describe('Admin', () => {
     await expect(page.locator('body')).toContainText(/Ghost Kitchen|Admin|Login/i);
   });
 
+  test('login form posts to /admin/login.php', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const form = page.locator('form[method="POST"]').first();
+    await expect(form).toHaveAttribute('action', '/admin/login.php');
+  });
+
   test('login with default credentials redirects to dashboard', async ({ page }) => {
     await page.goto('/admin/login.php');
     await page.getByLabel(/username/i).fill('admin');
@@ -47,6 +53,11 @@ test.describe('Admin', () => {
     await page.getByRole('button', { name: /create order/i }).click();
     await expect(page.locator('.alert-success')).toContainText(/created|success/i);
     await expect(page.locator('table')).toContainText(/E2E Test|JOHN|TIMMY|display name/i);
+  });
+
+  test('dashboard requires login and redirects to /admin/login.php', async ({ page }) => {
+    await page.goto('/admin/index.php');
+    await expect(page).toHaveURL(/\/admin\/login\.php/);
   });
 
   test('API Keys page requires login', async ({ page }) => {
