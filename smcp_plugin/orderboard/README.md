@@ -165,7 +165,7 @@ Returns JSON specification of all available commands and parameters.
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `--api-key` (arg) or `ORDERBOARD_API_KEY` | Yes | - | API key for authentication |
-| `ORDERBOARD_BASE_URL` | No | `http://localhost:8000` | Order Board API URL |
+| `--base-url` (arg) or `ORDERBOARD_BASE_URL` | Yes (SMCP) | `http://localhost:8000` | Order Board base URL (pass as arg when using SMCP) |
 
 ## License
 

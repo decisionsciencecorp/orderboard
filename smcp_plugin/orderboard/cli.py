@@ -217,7 +217,7 @@ def get_description() -> Dict[str, Any]:
                 "description": "Create a new order on the board",
                 "parameters": [
                     {"name": "api_key", "type": "string", "description": "Order Board API key (required for auth)", "required": True},
-                    {"name": "base_url", "type": "string", "description": "Order Board base URL (optional)", "required": False},
+                    {"name": "base_url", "type": "string", "description": "Order Board base URL (required; e.g. http://localhost:8000)", "required": True},
                     {"name": "customer_name", "type": "string", "description": "Customer's full name", "required": True},
                     {"name": "platform", "type": "string", "description": "Delivery platform (doordash, ubereats, grubhub)", "required": True},
                     {"name": "order_id", "type": "string", "description": "Custom order ID (auto-generated if omitted)", "required": False},
@@ -229,7 +229,7 @@ def get_description() -> Dict[str, Any]:
                 "description": "Update an existing order",
                 "parameters": [
                     {"name": "api_key", "type": "string", "description": "Order Board API key (required for auth)", "required": True},
-                    {"name": "base_url", "type": "string", "description": "Order Board base URL (optional)", "required": False},
+                    {"name": "base_url", "type": "string", "description": "Order Board base URL (required; e.g. http://localhost:8000)", "required": True},
                     {"name": "order_id", "type": "string", "description": "Order ID to update", "required": False},
                     {"name": "id", "type": "number", "description": "Database ID to update (alternative to order_id)", "required": False},
                     {"name": "status", "type": "string", "description": "New status (preparing or ready)", "required": False},
@@ -243,7 +243,7 @@ def get_description() -> Dict[str, Any]:
                 "description": "Mark an order as ready with shelf location",
                 "parameters": [
                     {"name": "api_key", "type": "string", "description": "Order Board API key (required for auth)", "required": True},
-                    {"name": "base_url", "type": "string", "description": "Order Board base URL (optional)", "required": False},
+                    {"name": "base_url", "type": "string", "description": "Order Board base URL (required; e.g. http://localhost:8000)", "required": True},
                     {"name": "order_id", "type": "string", "description": "Order ID to mark ready", "required": True},
                     {"name": "shelf_location", "type": "string", "description": "Shelf location A-F", "required": True}
                 ]
@@ -253,7 +253,7 @@ def get_description() -> Dict[str, Any]:
                 "description": "List all active orders",
                 "parameters": [
                     {"name": "api_key", "type": "string", "description": "Order Board API key (required for auth)", "required": True},
-                    {"name": "base_url", "type": "string", "description": "Order Board base URL (optional)", "required": False},
+                    {"name": "base_url", "type": "string", "description": "Order Board base URL (required; e.g. http://localhost:8000)", "required": True},
                     {"name": "status", "type": "string", "description": "Filter by status (preparing, ready)", "required": False},
                     {"name": "platform", "type": "string", "description": "Filter by platform", "required": False},
                     {"name": "limit", "type": "number", "description": "Max results to return", "required": False}
@@ -264,7 +264,7 @@ def get_description() -> Dict[str, Any]:
                 "description": "Get details for a specific order",
                 "parameters": [
                     {"name": "api_key", "type": "string", "description": "Order Board API key (required for auth)", "required": True},
-                    {"name": "base_url", "type": "string", "description": "Order Board base URL (optional)", "required": False},
+                    {"name": "base_url", "type": "string", "description": "Order Board base URL (required; e.g. http://localhost:8000)", "required": True},
                     {"name": "order_id", "type": "string", "description": "Order ID to retrieve", "required": False},
                     {"name": "id", "type": "number", "description": "Database ID (alternative to order_id)", "required": False}
                 ]
@@ -274,7 +274,7 @@ def get_description() -> Dict[str, Any]:
                 "description": "Remove order from board (mark as picked up)",
                 "parameters": [
                     {"name": "api_key", "type": "string", "description": "Order Board API key (required for auth)", "required": True},
-                    {"name": "base_url", "type": "string", "description": "Order Board base URL (optional)", "required": False},
+                    {"name": "base_url", "type": "string", "description": "Order Board base URL (required; e.g. http://localhost:8000)", "required": True},
                     {"name": "order_id", "type": "string", "description": "Order ID to delete", "required": False},
                     {"name": "id", "type": "number", "description": "Database ID (alternative to order_id)", "required": False}
                 ]
@@ -284,7 +284,7 @@ def get_description() -> Dict[str, Any]:
                 "description": "Get order board statistics",
                 "parameters": [
                     {"name": "api_key", "type": "string", "description": "Order Board API key (required for auth)", "required": True},
-                    {"name": "base_url", "type": "string", "description": "Order Board base URL (optional)", "required": False}
+                    {"name": "base_url", "type": "string", "description": "Order Board base URL (required; e.g. http://localhost:8000)", "required": True}
                 ]
             }
         ]
@@ -326,8 +326,9 @@ Examples:
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
     
     def add_auth_args(p):
-        p.add_argument('--api-key', dest='api_key', help='Order Board API key (required unless ORDERBOARD_API_KEY is set)')
-        p.add_argument('--base-url', dest='base_url', help='Order Board base URL')
+        p.add_argument('--api-key', dest='api_key', required=True, help='Order Board API key')
+        p.add_argument('--base-url', dest='base_url', help='Order Board base URL (required by SMCP; or set ORDERBOARD_BASE_URL)')
+        p.add_argument('--baseUrl', dest='base_url', help=argparse.SUPPRESS)  # alias for SMCP servers that pass camelCase
 
     # create-order
     create_parser = subparsers.add_parser('create-order', help='Create a new order')
