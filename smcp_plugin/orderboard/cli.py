@@ -23,7 +23,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 
 
-# Configuration from environment
+# Configuration: API key and base URL (env overridden by --api-key / --base-url)
 API_KEY = os.getenv('ORDERBOARD_API_KEY', '')
 BASE_URL = os.getenv('ORDERBOARD_BASE_URL', 'http://localhost:8000')
 
@@ -211,6 +211,10 @@ def get_description() -> Dict[str, Any]:
             "version": "1.0.0",
             "description": "Ghost Kitchen Order Board - Manage delivery pickup orders"
         },
+        "global_parameters": [
+            {"name": "api_key", "type": "string", "description": "API key for Order Board API (required; use --api-key)", "required": True},
+            {"name": "base_url", "type": "string", "description": "Order Board base URL (optional; use --base-url)", "required": False}
+        ],
         "commands": [
             {
                 "name": "create-order",
@@ -290,20 +294,23 @@ Available commands:
   delete-order    Remove order (mark as picked up)
   stats           Get order statistics
 
-Environment variables:
-  ORDERBOARD_API_KEY   - API key for authentication
-  ORDERBOARD_BASE_URL  - Base URL (default: http://localhost:8000)
+Authentication:
+  --api-key KEY        API key (required unless ORDERBOARD_API_KEY is set)
+  --base-url URL       Base URL (default: http://localhost:8000 or ORDERBOARD_BASE_URL)
 
 Examples:
-  python cli.py create-order --customer-name "John Doe" --platform doordash
-  python cli.py mark-ready --order-id ORD-A1B2C3D4 --shelf-location B
-  python cli.py list-orders --status ready
-  python cli.py delete-order --order-id ORD-A1B2C3D4
+  python cli.py --api-key YOUR_KEY create-order --customer-name "John Doe" --platform doordash
+  python cli.py --api-key YOUR_KEY mark-ready --order-id ORD-A1B2C3D4 --shelf-location B
+  python cli.py --api-key YOUR_KEY list-orders --status ready
+  python cli.py --api-key YOUR_KEY delete-order --order-id ORD-A1B2C3D4
         """
     )
     
     # Add --describe for SMCP plugin discovery
     parser.add_argument('--describe', action='store_true', help='Output plugin description as JSON')
+    # API key and base URL as args (required for auth; env fallback for backwards compat)
+    parser.add_argument('--api-key', dest='api_key', help='API key for Order Board API (or set ORDERBOARD_API_KEY)')
+    parser.add_argument('--base-url', dest='base_url', default=None, help='Order Board base URL (default: http://localhost:8000 or ORDERBOARD_BASE_URL)')
     
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
     
@@ -349,6 +356,13 @@ Examples:
     
     args = parser.parse_args()
     
+    # Apply --api-key and --base-url (args take precedence over env)
+    global API_KEY, BASE_URL
+    if getattr(args, 'api_key', None):
+        API_KEY = args.api_key
+    if getattr(args, 'base_url', None):
+        BASE_URL = args.base_url.rstrip('/')
+    
     # Handle --describe
     if args.describe:
         print(json.dumps(get_description(), indent=2))
@@ -356,6 +370,10 @@ Examples:
     
     if not args.command:
         parser.print_help()
+        sys.exit(1)
+    
+    if not API_KEY:
+        print(json.dumps({"success": False, "error": "API key required: use --api-key or set ORDERBOARD_API_KEY"}, indent=2))
         sys.exit(1)
     
     # Convert args to dict, replacing hyphens with underscores

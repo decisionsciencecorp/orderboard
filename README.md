@@ -190,13 +190,10 @@ For AI agent integration via Model Context Protocol:
 # Install plugin
 cp -r smcp_plugin/orderboard /path/to/smcp/plugins/
 
-# Set environment
-export ORDERBOARD_API_KEY="your_api_key"
-export ORDERBOARD_BASE_URL="http://localhost:8000"
-
+# Pass API key as argument (or set ORDERBOARD_API_KEY / ORDERBOARD_BASE_URL)
 # Use via SMCP
-python cli.py create-order --customer-name "John Doe" --platform doordash
-python cli.py mark-ready --order-id ORD-A1B2C3D4 --shelf-location B
+python cli.py --api-key your_api_key create-order --customer-name "John Doe" --platform doordash
+python cli.py --api-key your_api_key mark-ready --order-id ORD-A1B2C3D4 --shelf-location B
 ```
 
 ## Agent Rules

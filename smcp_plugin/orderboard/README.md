@@ -16,8 +16,12 @@ An MCP plugin for managing ghost kitchen orders through AI agents.
    chmod +x /path/to/smcp/plugins/orderboard/cli.py
    ```
 
-3. Set environment variables:
+3. Pass the API key as an argument (recommended) or set env:
    ```bash
+   # Preferred: pass --api-key on every invocation
+   python cli.py --api-key YOUR_KEY create-order --customer-name "John Doe" --platform doordash
+
+   # Or set env for the session
    export ORDERBOARD_API_KEY="your_api_key_here"
    export ORDERBOARD_BASE_URL="http://localhost:8000"
    ```
@@ -25,12 +29,9 @@ An MCP plugin for managing ghost kitchen orders through AI agents.
 ### Standalone Usage
 
 ```bash
-# Set environment variables
-export ORDERBOARD_API_KEY="your_api_key_here"
-export ORDERBOARD_BASE_URL="http://localhost:8000"
-
-# Run commands
-python cli.py create-order --customer-name "John Doe" --platform doordash
+# API key as argument (required if not set in env)
+python cli.py --api-key your_api_key_here create-order --customer-name "John Doe" --platform doordash
+python cli.py --api-key your_api_key_here --base-url http://localhost:8000 list-orders
 ```
 
 ## Available Commands
@@ -40,7 +41,7 @@ python cli.py create-order --customer-name "John Doe" --platform doordash
 Create a new order on the board.
 
 ```bash
-python cli.py create-order \
+python cli.py --api-key YOUR_KEY create-order \
   --customer-name "John Doe" \
   --platform doordash \
   --notes "Extra napkins"
@@ -57,7 +58,7 @@ python cli.py create-order \
 Mark an order as ready for pickup and assign shelf location.
 
 ```bash
-python cli.py mark-ready \
+python cli.py --api-key YOUR_KEY mark-ready \
   --order-id ORD-A1B2C3D4 \
   --shelf-location B
 ```
@@ -71,7 +72,7 @@ python cli.py mark-ready \
 Update any order fields.
 
 ```bash
-python cli.py update-order \
+python cli.py --api-key YOUR_KEY update-order \
   --order-id ORD-A1B2C3D4 \
   --status ready \
   --shelf-location C
@@ -90,13 +91,13 @@ List all active orders with optional filters.
 
 ```bash
 # All orders
-python cli.py list-orders
+python cli.py --api-key YOUR_KEY list-orders
 
 # Ready orders only
-python cli.py list-orders --status ready
+python cli.py --api-key YOUR_KEY list-orders --status ready
 
 # DoorDash orders
-python cli.py list-orders --platform doordash
+python cli.py --api-key YOUR_KEY list-orders --platform doordash
 ```
 
 **Parameters:**
@@ -109,7 +110,7 @@ python cli.py list-orders --platform doordash
 Get details for a specific order.
 
 ```bash
-python cli.py get-order --order-id ORD-A1B2C3D4
+python cli.py --api-key YOUR_KEY get-order --order-id ORD-A1B2C3D4
 ```
 
 **Parameters:**
@@ -120,7 +121,7 @@ python cli.py get-order --order-id ORD-A1B2C3D4
 Remove an order from the board (marks as picked up).
 
 ```bash
-python cli.py delete-order --order-id ORD-A1B2C3D4
+python cli.py --api-key YOUR_KEY delete-order --order-id ORD-A1B2C3D4
 ```
 
 **Parameters:**
@@ -131,7 +132,7 @@ python cli.py delete-order --order-id ORD-A1B2C3D4
 Get order board statistics.
 
 ```bash
-python cli.py stats
+python cli.py --api-key YOUR_KEY stats
 ```
 
 ## Agent Rules
@@ -163,7 +164,7 @@ Returns JSON specification of all available commands and parameters.
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `ORDERBOARD_API_KEY` | Yes | - | API key for authentication |
+| `--api-key` (arg) or `ORDERBOARD_API_KEY` | Yes | - | API key for authentication |
 | `ORDERBOARD_BASE_URL` | No | `http://localhost:8000` | Order Board API URL |
 
 ## License
