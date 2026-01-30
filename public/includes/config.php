@@ -4,16 +4,30 @@
  * 
  * Database configuration and initialization for the order board system.
  * Following the Technonomicon pattern for LEMP stack applications.
+ *
+ * On production, set ORDERBOARD_BASE to the absolute path of the repo root
+ * (the directory that contains db/ and public/). If only public/ is deployed,
+ * set ORDERBOARD_BASE to a writable directory that will hold db/ and logs/.
  */
+
+// Application base path: repo root or override via env (e.g. /var/www/orderboard)
+$basePath = getenv('ORDERBOARD_BASE');
+if ($basePath === false || $basePath === '') {
+    $basePath = realpath(__DIR__ . '/../..') ?: (__DIR__ . '/../..');
+}
+$basePath = rtrim(str_replace('\\', '/', $basePath), '/');
 
 // Error reporting (disable display in production)
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../../logs/error.log');
+$logsDir = $basePath . '/logs';
+if (is_dir($logsDir) || @mkdir($logsDir, 0755, true)) {
+    ini_set('error_log', $logsDir . '/error.log');
+}
 
 // Database configuration
-define('DB_PATH', __DIR__ . '/../../db/orderboard.db');
+define('DB_PATH', $basePath . '/db/orderboard.db');
 define('DB_TIMEOUT', 30);
 
 // Application settings
@@ -45,6 +59,23 @@ define('DISPLAY_REFRESH_INTERVAL', 5000); // milliseconds
 define('MAX_DISPLAY_ORDERS', 12); // max orders shown on display
 
 /**
+ * Show configuration/database error and exit (avoids 500 with no info)
+ */
+function showConfigError(string $message): void {
+    if (php_sapi_name() === 'cli') {
+        fwrite(STDERR, "Config error: $message\n");
+        exit(1);
+    }
+    http_response_code(503);
+    header('Content-Type: text/html; charset=utf-8');
+    echo '<!DOCTYPE html><html><head><title>Service Unavailable</title></head><body>';
+    echo '<h1>Service Unavailable</h1><p>' . htmlspecialchars($message) . '</p>';
+    echo '<p>Check server logs and ensure <code>db/</code> and <code>logs/</code> exist and are writable. ';
+    echo 'You can set <code>ORDERBOARD_BASE</code> to the app root path if needed.</p></body></html>';
+    exit;
+}
+
+/**
  * Get database connection
  */
 function getDB(): SQLite3 {
@@ -53,10 +84,26 @@ function getDB(): SQLite3 {
     if ($db === null) {
         $dbDir = dirname(DB_PATH);
         if (!is_dir($dbDir)) {
-            mkdir($dbDir, 0755, true);
+            if (!@mkdir($dbDir, 0755, true)) {
+                showConfigError('Cannot create database directory: ' . $dbDir);
+            }
+        }
+        if (!is_writable($dbDir)) {
+            showConfigError('Database directory is not writable: ' . $dbDir);
         }
         
-        $db = new SQLite3(DB_PATH);
+        try {
+            $db = new SQLite3(DB_PATH);
+        } catch (Throwable $e) {
+            $log = ini_get('error_log');
+            if ($log) {
+                error_log('OrderBoard getDB: ' . $e->getMessage() . ' path=' . DB_PATH);
+            }
+            showConfigError('Database unavailable. Check logs and path: ' . DB_PATH);
+        }
+        if ($db === false) {
+            showConfigError('Database unavailable: ' . DB_PATH);
+        }
         $db->busyTimeout(DB_TIMEOUT * 1000);
         $db->exec('PRAGMA journal_mode = WAL');
         $db->exec('PRAGMA foreign_keys = ON');
@@ -189,8 +236,7 @@ function getJsonBody(): array {
     return is_array($data) ? $data : [];
 }
 
-// Create logs directory if needed
-$logsDir = __DIR__ . '/../../logs';
-if (!is_dir($logsDir)) {
-    mkdir($logsDir, 0755, true);
+// Ensure logs directory exists (already set $logsDir above for error_log)
+if (!empty($logsDir) && !is_dir($logsDir)) {
+    @mkdir($logsDir, 0755, true);
 }
