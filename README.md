@@ -240,6 +240,7 @@ Edit `public/includes/config.php`:
 define('SITE_URL', 'https://yourdomain.com');
 define('DISPLAY_REFRESH_INTERVAL', 5000); // milliseconds
 define('MAX_DISPLAY_ORDERS', 12);
+define('RATE_LIMIT_ENABLED', false);  // set true if exposing API publicly
 define('RATE_LIMIT_REQUESTS', 60);
 define('RATE_LIMIT_WINDOW', 60); // seconds
 ```

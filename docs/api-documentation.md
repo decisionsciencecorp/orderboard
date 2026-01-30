@@ -328,6 +328,8 @@ Get order board statistics.
 
 ### 429 Too Many Requests
 
+Returned only when rate limiting is enabled (`RATE_LIMIT_ENABLED` in config).
+
 ```json
 {
     "success": false,
@@ -348,11 +350,12 @@ Get order board statistics.
 
 ## Rate Limiting
 
-- **Default**: 60 requests per minute
-- **Scope**: Per IP address or API key
-- **Reset**: Rolling window
+Rate limiting is **disabled by default** for internal use. To enable it (e.g. if exposing the API publicly), set `RATE_LIMIT_ENABLED` to `true` in `public/includes/config.php`.
 
-When rate limited, you'll receive HTTP 429 with the error message.
+When enabled:
+- **Limit**: 60 requests per minute (configurable via `RATE_LIMIT_REQUESTS` / `RATE_LIMIT_WINDOW`)
+- **Scope**: Per IP address or API key
+- **Response**: HTTP 429 with error message when exceeded
 
 ---
 

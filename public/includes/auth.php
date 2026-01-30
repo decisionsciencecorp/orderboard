@@ -142,9 +142,12 @@ function requireApiKey(): array {
 }
 
 /**
- * Check rate limit
+ * Check rate limit (no-op when RATE_LIMIT_ENABLED is false)
  */
 function checkRateLimit(string $identifier): bool {
+    if (!RATE_LIMIT_ENABLED) {
+        return true;
+    }
     $db = getDB();
     $now = time();
     $windowStart = $now - RATE_LIMIT_WINDOW;
@@ -170,9 +173,12 @@ function checkRateLimit(string $identifier): bool {
 }
 
 /**
- * Enforce rate limit
+ * Enforce rate limit (no-op when RATE_LIMIT_ENABLED is false)
  */
 function enforceRateLimit(): void {
+    if (!RATE_LIMIT_ENABLED) {
+        return;
+    }
     $identifier = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
     
     // Also use API key if available

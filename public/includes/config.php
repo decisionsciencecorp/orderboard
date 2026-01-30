@@ -40,7 +40,8 @@ define('SESSION_NAME', 'ghost_kitchen_orderboard');
 define('SESSION_LIFETIME', 3600); // 1 hour
 define('PASSWORD_COST', 12); // bcrypt cost
 
-// Rate limiting
+// Rate limiting (disabled by default for internal use; set to true if exposing API publicly)
+define('RATE_LIMIT_ENABLED', false);
 define('RATE_LIMIT_REQUESTS', 60);
 define('RATE_LIMIT_WINDOW', 60); // seconds
 
