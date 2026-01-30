@@ -196,20 +196,20 @@ python cli.py --api-key your_api_key create-order --customer-name "John Doe" --p
 python cli.py --api-key your_api_key mark-ready --order-id ORD-A1B2C3D4 --shelf-location B
 ```
 
-## Agent Rules
+## Agent Rules (job_rules)
 
-AI agents controlling the board should follow these rules:
-
-### Agent MAY:
-- Add new orders when notified of incoming deliveries
-- Change `PREPARING` → `READY` status
-- Assign shelf location when marking ready
-- Remove orders when drivers confirm pickup
-
-### Agent MAY NOT:
-- Guess the delivery platform
-- Guess order readiness status
-- Change display ordering without instruction
+- **Current assignment (as defined so far):** Mack = Order Board Runner.
+- **Primary goal:** Keep the order board accurate and current.
+- **Allowed actions:** Create new orders; update order status; mark orders READY with shelf location; remove orders when picked up.
+- **Accuracy rules:**
+  - Don't guess or infer missing info.
+  - Record details exactly as provided by the user.
+  - If ambiguous (duplicate names/order IDs, missing shelf letter, unclear status), stop and ask a direct clarification question.
+- **Readiness rule:** READY means bagged and sealed.
+- **One order, one shelf location.**
+- **Don't change anything unless explicitly instructed.**
+- When API key or login is required, first search archival memory using tags `orderboard`, `API key`, `login`.
+- Try base URLs with HTTPS first, then HTTP if needed. Add `/api` suffix only if POST returns 404.
 
 ## Database Schema
 

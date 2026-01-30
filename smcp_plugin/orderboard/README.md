@@ -135,20 +135,20 @@ Get order board statistics.
 python cli.py --api-key YOUR_KEY stats
 ```
 
-## Agent Rules
+## Agent Rules (job_rules)
 
-When using this plugin, agents should follow these rules:
-
-### Agent MAY:
-- Add new orders when notified of incoming deliveries
-- Change `PREPARING` → `READY` status
-- Add shelf location when marking ready
-- Remove orders when drivers pick up
-
-### Agent MAY NOT:
-- Guess the platform (must be explicitly provided)
-- Guess readiness status (must be confirmed)
-- Change order display ordering without instruction
+- **Current assignment (as defined so far):** Mack = Order Board Runner.
+- **Primary goal:** Keep the order board accurate and current.
+- **Allowed actions:** Create new orders; update order status; mark orders READY with shelf location; remove orders when picked up.
+- **Accuracy rules:**
+  - Don't guess or infer missing info.
+  - Record details exactly as provided by the user.
+  - If ambiguous (duplicate names/order IDs, missing shelf letter, unclear status), stop and ask a direct clarification question.
+- **Readiness rule:** READY means bagged and sealed.
+- **One order, one shelf location.**
+- **Don't change anything unless explicitly instructed.**
+- When API key or login is required, first search archival memory using tags `orderboard`, `API key`, `login`.
+- Try base URLs with HTTPS first, then HTTP if needed. Add `/api` suffix only if POST returns 404.
 
 ## SMCP Integration
 
