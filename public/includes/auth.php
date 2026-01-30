@@ -37,7 +37,7 @@ function isLoggedIn(): bool {
  */
 function requireLogin(): void {
     if (!isLoggedIn()) {
-        header('Location: login.php');
+        header('Location: /admin/login.php');
         exit;
     }
 }
@@ -56,9 +56,10 @@ function attemptLogin(string $username, string $password): bool {
     if ($user && password_verify($password, $user['password_hash'])) {
         startSecureSession();
         session_regenerate_id(true);
-        $_SESSION['admin_id'] = $user['id'];
+        $_SESSION['admin_id'] = (int) $user['id'];
         $_SESSION['admin_username'] = $user['username'];
         $_SESSION['login_time'] = time();
+        session_write_close();
         return true;
     }
     

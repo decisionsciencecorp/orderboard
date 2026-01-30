@@ -8,7 +8,7 @@ require_once __DIR__ . '/../includes/csrf.php';
 
 // Redirect if already logged in
 if (isLoggedIn()) {
-    header('Location: index.php');
+    header('Location: /admin/index.php');
     exit;
 }
 
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = $_POST['password'] ?? '';
         
         if (attemptLogin($username, $password)) {
-            header('Location: index.php');
+            header('Location: /admin/index.php');
             exit;
         } else {
             $error = 'Invalid username or password.';
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
                     <?php endif; ?>
                     
-                    <form method="POST" action="">
+                    <form method="POST" action="/admin/login.php">
                         <?= csrfField() ?>
                         
                         <div class="mb-3">
