@@ -32,7 +32,20 @@ define('DB_TIMEOUT', 30);
 
 // Application settings
 define('SITE_NAME', 'Ghost Kitchen Order Board');
-define('SITE_URL', 'http://localhost:8000');
+require_once __DIR__ . '/https_request.php';
+if (!defined('SITE_URL')) {
+    $envUrl = getenv('SITE_URL');
+    if (is_string($envUrl) && trim($envUrl) !== '') {
+        define('SITE_URL', rtrim(trim($envUrl), '/'));
+    } else {
+        $host = (string) ($_SERVER['HTTP_HOST'] ?? '');
+        if ($host !== '' && $host !== 'localhost' && strpos($host, '127.0.0.1') === false) {
+            define('SITE_URL', (dsc_request_is_https() ? 'https' : 'http') . '://' . $host);
+        } else {
+            define('SITE_URL', 'http://localhost:8000');
+        }
+    }
+}
 define('API_VERSION', '1.0.0');
 
 // Security settings

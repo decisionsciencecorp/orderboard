@@ -12,11 +12,12 @@ require_once __DIR__ . '/config.php';
  */
 function startSecureSession(): void {
     if (session_status() === PHP_SESSION_NONE) {
+        require_once __DIR__ . '/https_request.php';
         session_name(SESSION_NAME);
         session_set_cookie_params([
             'lifetime' => SESSION_LIFETIME,
             'path' => '/',
-            'secure' => isset($_SERVER['HTTPS']),
+            'secure' => dsc_session_cookie_secure(),
             'httponly' => true,
             'samesite' => 'Strict'
         ]);
